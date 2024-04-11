@@ -1,7 +1,7 @@
 diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchip/Makefile
 --- a/arch/arm64/boot/dts/rockchip/Makefile
 +++ b/arch/arm64/boot/dts/rockchip/Makefile
-@@ -1 +1,11 @@
+@@ -1 +1,12 @@
  # SPDX-License-Identifier: GPL-2.0
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-rp-king3399.dtb
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-zcube1-max.dtb
@@ -13,3 +13,4 @@ diff --git a/arch/arm64/boot/dts/rockchip/Makefile b/arch/arm64/boot/dts/rockchi
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-eaidk-610.dtb
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-fine3399.dtb
 +dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-aio-sv901.dtb
++dtb-$(CONFIG_ARCH_ROCKCHIP) += rk3399-r08.dtb
