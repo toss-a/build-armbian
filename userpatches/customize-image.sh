@@ -6,23 +6,49 @@ BOARD=$3
 BUILD_DESKTOP=$4
 ARCH=$5
 
-FIRST_RUN=/root/first_run.sh
-
 set -e
 
-# Freeze armbian/kernel/dtb version
-apt-mark hold armbian-firmware
-apt-mark hold armbian-bsp-cli-*
-apt-mark hold linux-image-*
-apt-mark hold linux-dtb-*
-apt-mark hold linux-u-boot-*
+# Copy DTB, Unofficial support board update kernel while lost dtb.
+BOOT_CONF=/boot/extlinux/extlinux.conf
+if [ -f ${BOOT_CONF} ]; then
+    mkdir -p /boot/dtb
+    DTB_PATH=$(cat ${BOOT_CONF} | grep 'fdt /boot/dtb/' | awk '{print $2}')
+    DTB_NAME=$(echo ${DTB_PATH##*/})
+    NEW_PATH=/boot/dtb/${DTB_NAME}
+    \cp ${DTB_PATH} ${NEW_PATH}
+    sed -i "s|${DTB_PATH}|${NEW_PATH}|g" ${BOOT_CONF}
+fi
 
+# Disable update kernel
+mkdir -p /etc/apt/preferences.d
+DISABLE_UPDATE_CONF=/etc/apt/preferences.d/disable-update
+PKG_LIST=$(dpkg-query --show --showformat='${Package}\n')
+
+function DISABLE_UPDATE() {
+    echo -e "Package: $1\nPin: version *\nPin-Priority: -1\n" >> ${DISABLE_UPDATE_CONF}
+}
+
+cat /dev/null > ${DISABLE_UPDATE_CONF}
+DISABLE_UPDATE armbian-firmware
+DISABLE_UPDATE $(echo "${PKG_LIST}" | grep "armbian-bsp-cli-")
+DISABLE_UPDATE $(echo "${PKG_LIST}" | grep "^linux-image-")
+DISABLE_UPDATE $(echo "${PKG_LIST}" | grep "^linux-dtb-")
+DISABLE_UPDATE $(echo "${PKG_LIST}" | grep "^linux-u-boot")
+
+# Replace USTC mirror source
+FIRST_RUN=/root/first_run.sh
 cat <<EOF >${FIRST_RUN}
 #!/bin/bash
 
 # Set mirrors to USTC
+# Debian
 sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list
 sed -i 's|security.debian.org|mirrors.ustc.edu.cn/debian-security|g' /etc/apt/sources.list
+
+# Ubuntu
+sed -i 's|ports.ubuntu.com|mirrors.ustc.edu.cn/ubuntu-ports|g' /etc/apt/sources.list
+
+# Armbian
 sed -i 's|apt.armbian.com|mirrors.ustc.edu.cn/armbian|g' /etc/apt/sources.list.d/armbian.list
 
 EOF
