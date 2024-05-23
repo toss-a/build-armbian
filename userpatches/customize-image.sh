@@ -62,6 +62,7 @@ show_cpu_usage=1
 show_cpu_frequency=1
 show_cpu_temperature=1
 tree_view=1
+hide_userland_threads=1
 
 EOF
 
