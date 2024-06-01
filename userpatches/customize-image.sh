@@ -70,3 +70,8 @@ EOF
 if [ "${BOARD}" = "zcube1-max" ]; then
     systemctl disable wpa_supplicant.service
 fi
+
+# CDHX-RB30 need reload AX88179 module
+if [ "${BOARD}" = "cdhx-rb30" ]; then
+    sed -i '$i\rmmod ax88179_178a\nmodprobe ax88179_178a\n' /etc/rc.local
+fi
