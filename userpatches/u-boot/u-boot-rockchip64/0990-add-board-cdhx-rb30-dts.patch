@@ -95,12 +95,15 @@ diff --git a/arch/arm/dts/rk3399-cdhx-rb30-u-boot.dtsi b/arch/arm/dts/rk3399-cdh
 new file mode 100644
 --- /dev/null
 +++ b/arch/arm/dts/rk3399-cdhx-rb30-u-boot.dtsi
-@@ -0,0 +1,13 @@
+@@ -0,0 +1,16 @@
 +// SPDX-License-Identifier: GPL-2.0+
 +#include "rk3399-u-boot.dtsi"
 +#include "rk3399-sdram-ddr3-1333.dtsi"
 +
 +/ {
++	config {
++		sysreset-gpio = <&gpio1 RK_PA6 GPIO_ACTIVE_HIGH>;
++	};
 +	chosen {
 +		u-boot,spl-boot-order = "same-as-spl", &sdhci, &sdmmc;
 +	};
