@@ -7,6 +7,7 @@ BOARD_LIST=(all tn3399-v3 zcube1-max dg3399 nanopct4 cdhx-rb30)
 
 # default value
 BOARD=$1
+USE_MIRROR=$2
 BRANCH=current
 RELEASE=bookworm
 BUILD_MINIMAL=no
@@ -15,6 +16,20 @@ KERNEL_CONFIGURE=no
 COMPRESS_OUTPUTIMAGE=sha,xz
 BOOT_LOGO=no
 # GIT_BRANCH=$(git branch --show-current)
+COMMON_ARGS="BRANCH=${BRANCH} " \
+    "RELEASE=${RELEASE} " \
+    "BUILD_MINIMAL=${BUILD_MINIMAL} " \
+    "BUILD_DESKTOP=${BUILD_DESKTOP} " \
+    "KERNEL_CONFIGURE=${KERNEL_CONFIGURE} " \
+    "COMPRESS_OUTPUTIMAGE=${COMPRESS_OUTPUTIMAGE} " \
+    "BOOT_LOGO=${BOOT_LOGO} "
+
+if [ "${USE_MIRROR}" == "1" ]; then
+    MIRROR_ARGS="GITHUB_MIRROR=ghproxy " \
+        "GHPROXY_ADDRESS=mirror.ghproxy.com " \
+        "UBOOT_MIRROR=gitee " \
+        "MAINLINE_MIRROR=tuna "
+fi
 
 git switch main
 
@@ -34,27 +49,13 @@ build_image() {
     cd ${WORKSPACE}
     if [ "${BOARD}" == "all" ]; then
         for ((i = 1; i < ${#BOARD_LIST[@]}; i++)); do
-            ./compile.sh BOARD=${BOARD_LIST[i]} \
-                BRANCH=${BRANCH} \
-                RELEASE=${RELEASE} \
-                BUILD_MINIMAL=${BUILD_MINIMAL} \
-                BUILD_DESKTOP=${BUILD_DESKTOP} \
-                KERNEL_CONFIGURE=${KERNEL_CONFIGURE} \
-                COMPRESS_OUTPUTIMAGE=${COMPRESS_OUTPUTIMAGE} \
-                BOOT_LOGO=${BOOT_LOGO}
+            ./compile.sh BOARD=${BOARD_LIST[i]} ${COMMON_ARGS}
             if [ $? -ne 0 ]; then
                 exit 1
             fi
         done
     else
-        ./compile.sh BOARD=${BOARD} \
-            BRANCH=${BRANCH} \
-            RELEASE=${RELEASE} \
-            BUILD_MINIMAL=${BUILD_MINIMAL} \
-            BUILD_DESKTOP=${BUILD_DESKTOP} \
-            KERNEL_CONFIGURE=${KERNEL_CONFIGURE} \
-            COMPRESS_OUTPUTIMAGE=${COMPRESS_OUTPUTIMAGE} \
-            BOOT_LOGO=${BOOT_LOGO}
+        ./compile.sh BOARD=${BOARD} ${BUILD_ARGS}
     fi
 }
 
