@@ -3,7 +3,7 @@
 set -e
 WORKSPACE=$(dirname $(readlink -f $0))
 
-BOARD_LIST=(all tn3399-v3 zcube1-max dg3399 nanopct4 cdhx-rb30)
+BOARD_LIST=(all tn3399-v3 zcube1-max dg3399 nanopct4 tpm312)
 
 # default value
 BOARD=$1
@@ -16,13 +16,7 @@ KERNEL_CONFIGURE=no
 COMPRESS_OUTPUTIMAGE=sha,xz
 BOOT_LOGO=no
 # GIT_BRANCH=$(git branch --show-current)
-COMMON_ARGS="BRANCH=${BRANCH} " \
-    "RELEASE=${RELEASE} " \
-    "BUILD_MINIMAL=${BUILD_MINIMAL} " \
-    "BUILD_DESKTOP=${BUILD_DESKTOP} " \
-    "KERNEL_CONFIGURE=${KERNEL_CONFIGURE} " \
-    "COMPRESS_OUTPUTIMAGE=${COMPRESS_OUTPUTIMAGE} " \
-    "BOOT_LOGO=${BOOT_LOGO} "
+COMMON_ARGS="BRANCH=${BRANCH} RELEASE=${RELEASE} BUILD_MINIMAL=${BUILD_MINIMAL} BUILD_DESKTOP=${BUILD_DESKTOP} KERNEL_CONFIGURE=${KERNEL_CONFIGURE} COMPRESS_OUTPUTIMAGE=${COMPRESS_OUTPUTIMAGE} BOOT_LOGO=${BOOT_LOGO}"
 
 if [ "${USE_MIRROR}" == "1" ]; then
     MIRROR_ARGS="GITHUB_MIRROR=ghproxy " \
@@ -55,7 +49,7 @@ build_image() {
             fi
         done
     else
-        ./compile.sh BOARD=${BOARD} ${BUILD_ARGS}
+        ./compile.sh BOARD=${BOARD} ${COMMON_ARGS}
     fi
 }
 

@@ -10,6 +10,6 @@ diff --git a/arch/arm/dts/Makefile b/arch/arm/dts/Makefile
 +	rk3399-aio-sv901.dtb \
 +	rk3399-dg3399.dtb \
 +	rk3399-eaidk-610.dtb \
-+	rk3399-fine3399.dtb \
++	rk3399-tpm312.dtb \
 +	rk3399-r08.dtb \
 +	rk3399-cdhx-rb30.dtb
