@@ -28,4 +28,5 @@
 
 
 # 其他：
+  King3399开发板rockchip64内核需要启用CONFIG_POWER_RESET_GPIO=y,CONFIG_POWER_RESET_GPIO_RESTART=y否则USB2.0无法使用
   编译参数和机型配置文件是我根据个人喜好设定的，你们编译的时候可以根据Armbian官方文档修改编译参数。
