@@ -1,21 +1,23 @@
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-zcube1-max.dts b/arch/arm64/boot/dts/rockchip/rk3399-zcube1-max.dts
 new file mode 100644
+index 0000000..8ca993d
 --- /dev/null
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-zcube1-max.dts
-@@ -0,0 +1,920 @@
+@@ -0,0 +1,962 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/dts-v1/;
++
 +#include <dt-bindings/pwm/pwm.h>
 +#include <dt-bindings/input/input.h>
 +#include <dt-bindings/interrupt-controller/irq.h>
 +#include "rk3399.dtsi"
-+#include "rk3399-opp.dtsi"
 +
 +/ {
 +	model = "ZCuble1 Max";
 +	compatible = "rockchip,rk3399-zcube1-max", "rockchip,rk3399";
 +
 +	aliases {
++		ethernet0 = &gmac;
 +		mmc0 = &sdio0;
 +		mmc1 = &sdhci;
 +	};
@@ -212,6 +214,14 @@ new file mode 100644
 +		#size-cells = <0>;
 +		status = "disabled";
 +	};
++
++	virtual_pd: virtual-pd {
++		compatible = "linux,extcon-usbc-virtual-pd";
++		det-gpios = <&gpio4 RK_PD1 GPIO_ACTIVE_HIGH>; /* DP_HPD */
++		vpd-data-role = "display-port";
++		vpd-super-speed;
++		// vpd-polarity;
++	};
 +};
 +
 +&cpu_l0 {
@@ -281,10 +291,6 @@ new file mode 100644
 +dp-det-gpios = <&gpio4 RK_PD1 GPIO_ACTIVE_HIGH>;
 +hdmi-5v-gpios = <&gpio1 RK_PC6 GPIO_ACTIVE_LOW>;
 +*/
-+
-+// &cdn_dp {
-+// 	status = "okay";
-+// };
 +
 +&i2c0 {
 +	status = "okay";
@@ -785,8 +791,8 @@ new file mode 100644
 +	sd-uhs-sdr104;
 +	#address-cells = <1>;
 +	#size-cells = <0>;
-+	status = "okay";
-+ // status = "disabled";
++	// status = "okay";
++	status = "disabled";
 +
 +	brcmf: wifi@1 {
 +		compatible = "brcm,bcm4329-fmac";
@@ -796,8 +802,8 @@ new file mode 100644
 +		interrupt-names = "host-wake";
 +		pinctrl-names = "default";
 +		pinctrl-0 = <&wifi_host_wake_l>;
-+		status = "okay";
-+	 // status = "disabled";
++		// status = "okay";
++		status = "disabled";
 +	};
 +};
 +
@@ -814,7 +820,6 @@ new file mode 100644
 +	rockchip,hw-tshut-mode = <1>;
 +	/* tshut polarity 0:LOW 1:HIGH */
 +	rockchip,hw-tshut-polarity = <1>;
-+	rockchip,hw-tshut-temp = <110000>;
 +	status = "okay";
 +};
 +
@@ -910,6 +915,8 @@ new file mode 100644
 +
 +&vopb {
 +	status = "okay";
++	// assigned-clocks = <&cru DCLK_VOP0_DIV>;
++	// assigned-clock-parents = <&cru PLL_VPLL>;
 +};
 +
 +&vopb_mmu {
@@ -918,8 +925,47 @@ new file mode 100644
 +
 +&vopl {
 +	status = "okay";
++	// assigned-clocks = <&cru DCLK_VOP1_DIV>;
++	// assigned-clock-parents = <&cru PLL_CPLL>;
 +};
 +
 +&vopl_mmu {
 +	status = "okay";
 +};
++
++//dp vopb
++//hdmi vopl
++// for DP, not verify
++&dp_in_vopl {
++	status = "disabled";
++};
++
++&hdmi_in_vopb {
++	status = "disabled";
++};
++
++// &cdn_dp {
++// 	status = "okay";
++// 	// phys = <&tcphy0_dp>;
++// 	extcon = <&virtual_pd>;
++// };
++
++&tcphy0 {
++	extcon = <&virtual_pd>;
++};
++
++// &tcphy1_dp {
++// 	status = "disabled";
++// };
++
++// &vopb {
++// 	assigned-clocks = <&cru DCLK_VOP0_DIV>;
++// 	assigned-clock-parents = <&cru PLL_CPLL>;
++// };
++// &vopl {
++// 	assigned-clocks = <&cru DCLK_VOP1_DIV>;
++// 	assigned-clock-parents = <&cru PLL_VPLL>;
++// };
+-- 
+2.34.1
+

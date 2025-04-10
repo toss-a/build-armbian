@@ -1,8 +1,9 @@
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-zysj.dts b/arch/arm64/boot/dts/rockchip/rk3399-zysj.dts
 new file mode 100644
+index 0000000..5072814
 --- /dev/null
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-zysj.dts
-@@ -0,0 +1,1187 @@
+@@ -0,0 +1,1186 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/dts-v1/;
 +
@@ -10,13 +11,13 @@ new file mode 100644
 +#include <dt-bindings/input/input.h>
 +#include <dt-bindings/usb/pd.h>
 +#include "rk3399.dtsi"
-+#include "rk3399-opp.dtsi"
 +
 +/ {
 +	model = "ZYSJ RK3399";
 +	compatible = "rockchip,rk3399";
 +
 +	aliases {
++		ethernet0 = &gmac;
 +		mmc0 = &sdio0;
 +		mmc1 = &sdmmc;
 +		mmc2 = &sdhci;
@@ -1020,7 +1021,6 @@ new file mode 100644
 +	#address-cells = <1>;
 +	#size-cells = <0>;
 +	status = "okay";
-+	// status = "disabled";
 +
 +	brcmf: wifi@1 {
 +		reg = <1>;
@@ -1190,3 +1190,6 @@ new file mode 100644
 +&vopl_mmu {
 +	status = "okay";
 +};
+-- 
+2.34.1
+

@@ -1,8 +1,9 @@
 diff --git a/arch/arm64/boot/dts/rockchip/rk3399-dg3399.dts b/arch/arm64/boot/dts/rockchip/rk3399-dg3399.dts
 new file mode 100644
+index 0000000..b605a5b
 --- /dev/null
 +++ b/arch/arm64/boot/dts/rockchip/rk3399-dg3399.dts
-@@ -0,0 +1,1026 @@
+@@ -0,0 +1,1028 @@
 +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 +/dts-v1/;
 +
@@ -12,14 +13,14 @@ new file mode 100644
 +#include <dt-bindings/interrupt-controller/irq.h>
 +#include "dt-bindings/usb/pd.h"
 +#include "rk3399.dtsi"
-+#include "rk3399-opp.dtsi"
-+// #include "rk3399-t-opp.dtsi"
++// #include "rk3399-t.dtsi"
 +
 +/ {
 +	model = "DG-3399";
 +	compatible = "ryd,dg-3399", "rockchip,rk3399";
 +
 +	aliases {
++		ethernet0 = &gmac;
 +		mmc0 = &sdio0;
 +		mmc1 = &sdmmc;
 +		mmc2 = &sdhci;
@@ -50,14 +51,15 @@ new file mode 100644
 +			wakeup-source;
 +		};
 +	};
-+/*
++
++	// pwm3
 +	ir-receiver {
 +		compatible = "gpio-ir-receiver";
 +		gpios = <&gpio0 RK_PA6 GPIO_ACTIVE_LOW>;
 +		pinctrl-0 = <&ir_int>;
 +		pinctrl-names = "default";
 +	};
-+*/
++
 +	leds {
 +		compatible = "gpio-leds";
 +		pinctrl-names = "default";
@@ -656,6 +658,7 @@ new file mode 100644
 +};
 +/*
 +// not work
++// reset 4 RK_PD3
 +&pcie0 {
 +	ep-gpios = <&gpio0 RK_PB5 GPIO_ACTIVE_HIGH>;
 +	pinctrl-names = "default";
@@ -715,7 +718,7 @@ new file mode 100644
 +
 +	pcie {
 +		pcie_perst: pcie-perst {
-+			rockchip,pins = <0 RK_PB5 RK_FUNC_GPIO &pcfg_pull_none>; // verify
++			rockchip,pins = <0 RK_PB5 RK_FUNC_GPIO &pcfg_pull_none>;
 +		};
 +
 +		pcie_pwr_en: pcie-pwr-en {
@@ -1029,3 +1032,6 @@ new file mode 100644
 +&vopl_mmu {
 +	status = "okay";
 +};
+-- 
+2.34.1
+
